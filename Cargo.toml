@@ -1,0 +1,24 @@
+[package]
+name = "cortex9-forense-artefactos"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.85"
+license = "Apache-2.0"
+description = "Modelos formales verificables de artefactos de forense movil: contador de intentos de PIN (BFU/AFU), protocolo RPMB anti-rollback, Gatekeeper HMAC-throttle y tabla de capacidades por estado de bloqueo. Nivel modelo/amenaza, sin recetas operativas."
+repository = "https://github.com/federiconbaez/cortex9-forense-artefactos"
+authors = ["Federico Nicolas Báez Rizzo"]
+publish = false
+default-run = "forense-artefactos"
+
+[dependencies]
+
+[lib]
+name = "forense_artefactos"
+path = "src/lib.rs"
+
+[[bin]]
+name = "forense-artefactos"
+path = "src/bin/forense-artefactos.rs"
+
+[profile.release]
+opt-level = 2
