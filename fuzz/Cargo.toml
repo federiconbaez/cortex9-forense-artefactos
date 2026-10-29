@@ -1,0 +1,21 @@
+[package]
+name = "cortex9-forense-artefactos-fuzz"
+version = "0.0.0"
+publish = false
+edition = "2021"
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+libfuzzer-sys = "0.4"
+
+[dependencies.cortex9-forense-artefactos]
+path = ".."
+
+[[bin]]
+name = "hmac_pin_rpmb"
+path = "fuzz_targets/hmac_pin_rpmb.rs"
+test = false
+doc = false
+bench = false

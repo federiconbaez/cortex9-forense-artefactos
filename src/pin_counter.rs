@@ -372,9 +372,9 @@ mod tests {
 
     #[test]
     fn propiedades_semilla_fija_100_por_construccion() {
-        // Umbral preregistrado: 100/100 en las 6 propiedades, seed=0xC09_F02E.
+        // Umbral preregistrado: 100/100 en las 6 propiedades, seed=0x0C09_F02E.
         // Etiqueta: "por construcción" (el corpus es el propio modelo).
-        let rep = measure_pin_properties(0xC09_F02E, 100);
+        let rep = measure_pin_properties(0x0C09_F02E, 100);
         assert_eq!(rep.trials, 100);
         assert_eq!(rep.mono_ok, 100);
         assert_eq!(rep.throttle_ok, 100);

@@ -298,8 +298,8 @@ mod tests {
 
     #[test]
     fn propiedades_semilla_fija_100_por_construccion() {
-        // Umbral preregistrado: 100/100 en las 5 propiedades, seed=0xC09_6A7E.
-        let rep = measure_gatekeeper_properties(0xC09_6A7E, 100);
+        // Umbral preregistrado: 100/100 en las 5 propiedades, seed=0x0C09_6A7E.
+        let rep = measure_gatekeeper_properties(0x0C09_6A7E, 100);
         assert_eq!(rep.trials, 100);
         assert_eq!(rep.enroll_verify_ok, 100);
         assert_eq!(rep.wrong_rejected, 100);

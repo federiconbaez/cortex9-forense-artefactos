@@ -7,7 +7,7 @@ on:
 
 jobs:
   unit:
-    name: fmt + clippy + test + medición
+    name: fmt + clippy + test + measure-ci + bfs + mutants
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -21,7 +21,7 @@ jobs:
         run: cargo clippy --all-targets -- -D warnings
       - name: test
         run: cargo test --workspace
-      - name: reproducir medición
-        run: cargo run --quiet --bin forense-artefactos -- measure
+      - name: measure ci (1e4) + bfs + mutants
+        run: cargo run --release --quiet --bin forense-artefactos -- all --mode ci
       - name: catalog
-        run: cargo run --quiet --bin forense-artefactos -- catalog
+        run: cargo run --release --quiet --bin forense-artefactos -- catalog

@@ -1,0 +1,28 @@
+=== measure mode=full trials=10000000 ===
+pin_counter: mono=10000000/10000000 throttle=10000000/10000000 wipe=10000000/10000000 reset=10000000/10000000 bfu_afu=10000000/10000000 ce=10000000/10000000 => CUMPLIDO
+rpmb: mono=10000000/10000000 bad_mac=10000000/10000000 replay=10000000/10000000 honest=10000000/10000000 rt=10000000/10000000 => CUMPLIDO
+gatekeeper: enroll=10000000/10000000 wrong=10000000/10000000 tracks=10000000/10000000 wipe=10000000/10000000 th=10000000/10000000 => CUMPLIDO
+weaver: indep=10000000/10000000 th=10000000/10000000 wipe=10000000/10000000 enroll=10000000/10000000 => CUMPLIDO
+fbe_keys: de=10000000/10000000 ce_afu=10000000/10000000 evict=10000000/10000000 wipe=10000000/10000000 => CUMPLIDO
+apple_dp: bfu_d=10000000/10000000 afu=10000000/10000000 relock=10000000/10000000 => CUMPLIDO
+inactivity: timeout=10000000/10000000 touch=10000000/10000000 evict=10000000/10000000 => CUMPLIDO
+avb_rollback: mono=10000000/10000000 rb=10000000/10000000 eq=10000000/10000000 => CUMPLIDO
+powercut: wbv_breaks=10000000/10000000 vbw_preserves=10000000/10000000 wbv_nocut=10000000/10000000 vbw_nocut=10000000/10000000 => CUMPLIDO
+pate: honest=10000000/10000000 insert=10000000/10000000 omit=10000000/10000000 reorder=10000000/10000000 => CUMPLIDO
+lock_capabilities: rows=7 invariantes_ok=true => CUMPLIDO
+=== measure global: CUMPLIDO (elapsed_ms=671714) etiqueta=por construccion ===
+=== bfs (limites preregistrados) ===
+pin_counter: states=19 transitions=30 violations=0 elapsed_ms=0 bound=max_fails=5, throttle∈{0,1}, states BFU/AFU/Wiped => CUMPLIDO
+rpmb: states=32 transitions=332 violations=0 elapsed_ms=1 bound=n_blocks=2, write_counter≤8, data∈{0,1} => CUMPLIDO
+gatekeeper: states=15 transitions=24 violations=0 elapsed_ms=0 bound=max_fails=4, secreto abstracto {0,1}, RPMB tracks fails => CUMPLIDO
+=== bfs global: CUMPLIDO ===
+=== mutants (sensibilidad) ===
+pin_mono_broken: detected=true (fails before=0 after=0)
+pin_throttle_flat: detected=true (out=Rejected { remaining: 9, throttle_ms: 0 })
+pin_no_wipe: detected=true (state=Bfu fails=5)
+rpmb_accept_bad_mac: detected=true (mutante escribio con MAC invalido)
+rpmb_accept_replay: detected=true (acepto frame_wc=0 con device_wc previo 3)
+gk_skip_rpmb_persist: detected=true (ram_fails=1 rpmb_fails=0)
+pwr_wbf_claimed_safe: detected=true (write-before-verify no preserva invariante bajo power-cut)
+=== mutants: 7/7 detectados => CUMPLIDO ===
+EXIT:0

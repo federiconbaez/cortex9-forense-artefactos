@@ -27,6 +27,23 @@ cuenta como cumplimiento del umbral original.
 | `pate` MC | `0xC09_PATE` | `PATE_SEED` |
 | mutantes (orfoldo) | `0xC09_MUT1` | `MUT_SEED` |
 
+### Literales hex válidos (código)
+
+Los mnemónicos de la tabla se mapean a hex legal en Rust (preregistrado
+junto con este documento; no se cambian post-hoc):
+
+| Mnemónico | Literal |
+|-----------|--------:|
+| PIN / RPMB / GK | `0x0C09F02E` / `0x0C09F0B1` / `0x0C096A7E` |
+| WEA7 | `0x0C090EA7` |
+| FBE1 | `0x0C09FBE1` |
+| ADP1 | `0x0C09AD01` |
+| IDLE | `0x0C091D1E` |
+| AVB1 | `0x0C090AB1` |
+| PWR1 | `0x0C090911` |
+| PATE | `0x0C090A7E` |
+| MUT1 | `0x0C090071` |
+
 ## Umbrales Monte-Carlo (modo `full`)
 
 Todos: **10_000_000 / 10_000_000** propiedades OK, etiqueta **por construcción**

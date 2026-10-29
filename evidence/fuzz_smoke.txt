@@ -1,0 +1,55 @@
+   Compiling libfuzzer-sys v0.4.13
+   Compiling cortex9-forense-artefactos-fuzz v0.0.0 (/workspace/proyectos-2026-10-27/cortex9-forense-artefactos/fuzz)
+    Finished `release` profile [optimized + debuginfo] target(s) in 9.21s
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.01s
+     Running `fuzz/target/x86_64-unknown-linux-gnu/release/hmac_pin_rpmb -artifact_prefix=/workspace/proyectos-2026-10-27/cortex9-forense-artefactos/fuzz/artifacts/hmac_pin_rpmb/ -max_total_time=20 -max_len=128 /workspace/proyectos-2026-10-27/cortex9-forense-artefactos/fuzz/corpus/hmac_pin_rpmb`
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 1736031789
+INFO: Loaded 1 modules   (946 inline 8-bit counters): 946 [0x56321f9b0b70, 0x56321f9b0f22), 
+INFO: Loaded 1 PC tables (946 PCs): 946 [0x56321f9b0f28,0x56321f9b4a48), 
+INFO:        0 files found in /workspace/proyectos-2026-10-27/cortex9-forense-artefactos/fuzz/corpus/hmac_pin_rpmb
+INFO: A corpus is not provided, starting from an empty corpus
+#2	INITED cov: 116 ft: 117 corp: 1/1b exec/s: 0 rss: 33Mb
+#11	NEW    cov: 118 ft: 124 corp: 2/3b lim: 4 exec/s: 0 rss: 34Mb L: 2/2 MS: 4 ChangeByte-ShuffleBytes-ShuffleBytes-CopyPart-
+#16	NEW    cov: 118 ft: 131 corp: 3/6b lim: 4 exec/s: 0 rss: 35Mb L: 3/3 MS: 5 ShuffleBytes-CrossOver-CopyPart-ChangeBit-InsertByte-
+	NEW_FUNC[1/2]: 0x56321f835de0  (/workspace/proyectos-2026-10-27/cortex9-forense-artefactos/fuzz/target/x86_64-unknown-linux-gnu/release/hmac_pin_rpmb+0x159de0) (BuildId: 48e4e27b481405f36282e4abe69dcf44a42032ff)
+	NEW_FUNC[2/2]: 0x56321f835ff0  (/workspace/proyectos-2026-10-27/cortex9-forense-artefactos/fuzz/target/x86_64-unknown-linux-gnu/release/hmac_pin_rpmb+0x159ff0) (BuildId: 48e4e27b481405f36282e4abe69dcf44a42032ff)
+#19	NEW    cov: 139 ft: 158 corp: 4/10b lim: 4 exec/s: 0 rss: 35Mb L: 4/4 MS: 3 ChangeBinInt-ChangeByte-CopyPart-
+#227	NEW    cov: 139 ft: 160 corp: 5/15b lim: 6 exec/s: 0 rss: 36Mb L: 5/5 MS: 3 CopyPart-ChangeASCIIInt-InsertByte-
+#472	NEW    cov: 143 ft: 166 corp: 6/23b lim: 8 exec/s: 0 rss: 37Mb L: 8/8 MS: 5 ShuffleBytes-EraseBytes-InsertByte-CMP-InsertRepeatedBytes- DE: "\001\000"-
+#778	NEW    cov: 143 ft: 168 corp: 7/34b lim: 11 exec/s: 0 rss: 38Mb L: 11/11 MS: 1 InsertRepeatedBytes-
+#910	NEW    cov: 145 ft: 170 corp: 8/44b lim: 11 exec/s: 0 rss: 38Mb L: 10/11 MS: 2 ShuffleBytes-CMP- DE: "\000\000\000\000\000\000\000\000"-
+#995	REDUCE cov: 145 ft: 170 corp: 8/43b lim: 11 exec/s: 0 rss: 38Mb L: 10/10 MS: 5 EraseBytes-CrossOver-CopyPart-ChangeASCIIInt-EraseBytes-
+#1017	REDUCE cov: 145 ft: 170 corp: 8/42b lim: 11 exec/s: 0 rss: 38Mb L: 9/10 MS: 2 EraseBytes-InsertByte-
+#1671	NEW    cov: 145 ft: 176 corp: 9/59b lim: 17 exec/s: 0 rss: 39Mb L: 17/17 MS: 4 ChangeBit-PersAutoDict-PersAutoDict-InsertRepeatedBytes- DE: "\000\000\000\000\000\000\000\000"-"\000\000\000\000\000\000\000\000"-
+#2043	REDUCE cov: 145 ft: 176 corp: 9/57b lim: 17 exec/s: 0 rss: 40Mb L: 8/17 MS: 2 CrossOver-EraseBytes-
+#3723	REDUCE cov: 145 ft: 182 corp: 10/90b lim: 33 exec/s: 0 rss: 41Mb L: 33/33 MS: 5 ChangeBinInt-InsertRepeatedBytes-ChangeBit-CrossOver-CopyPart-
+#5994	NEW    cov: 145 ft: 184 corp: 11/141b lim: 53 exec/s: 0 rss: 41Mb L: 51/51 MS: 1 InsertRepeatedBytes-
+#6571	NEW    cov: 149 ft: 192 corp: 12/199b lim: 58 exec/s: 0 rss: 41Mb L: 58/58 MS: 2 CrossOver-InsertRepeatedBytes-
+#6712	NEW    cov: 150 ft: 194 corp: 13/254b lim: 58 exec/s: 0 rss: 41Mb L: 55/58 MS: 1 InsertRepeatedBytes-
+#7232	NEW    cov: 150 ft: 195 corp: 14/313b lim: 63 exec/s: 0 rss: 41Mb L: 59/59 MS: 5 InsertByte-ChangeBinInt-ChangeBinInt-CrossOver-InsertRepeatedBytes-
+#7250	REDUCE cov: 150 ft: 196 corp: 15/373b lim: 63 exec/s: 0 rss: 41Mb L: 60/60 MS: 3 ShuffleBytes-InsertRepeatedBytes-CopyPart-
+#7300	NEW    cov: 150 ft: 197 corp: 16/434b lim: 63 exec/s: 0 rss: 41Mb L: 61/61 MS: 5 InsertByte-ChangeByte-ChangeBit-CMP-InsertRepeatedBytes- DE: "xxxx"-
+#7309	NEW    cov: 150 ft: 198 corp: 17/496b lim: 63 exec/s: 0 rss: 41Mb L: 62/62 MS: 4 CrossOver-CrossOver-ChangeBit-InsertRepeatedBytes-
+#7323	NEW    cov: 151 ft: 199 corp: 18/559b lim: 63 exec/s: 0 rss: 41Mb L: 63/63 MS: 4 InsertRepeatedBytes-ChangeBinInt-ChangeByte-InsertRepeatedBytes-
+	NEW_FUNC[1/4]: 0x56321f8319d0  (/workspace/proyectos-2026-10-27/cortex9-forense-artefactos/fuzz/target/x86_64-unknown-linux-gnu/release/hmac_pin_rpmb+0x1559d0) (BuildId: 48e4e27b481405f36282e4abe69dcf44a42032ff)
+	NEW_FUNC[2/4]: 0x56321f831e30  (/workspace/proyectos-2026-10-27/cortex9-forense-artefactos/fuzz/target/x86_64-unknown-linux-gnu/release/hmac_pin_rpmb+0x155e30) (BuildId: 48e4e27b481405f36282e4abe69dcf44a42032ff)
+#7830	NEW    cov: 191 ft: 326 corp: 19/625b lim: 68 exec/s: 0 rss: 41Mb L: 66/66 MS: 2 InsertByte-InsertRepeatedBytes-
+#7837	NEW    cov: 191 ft: 327 corp: 20/693b lim: 68 exec/s: 0 rss: 41Mb L: 68/68 MS: 2 ChangeBinInt-CopyPart-
+#12639	REDUCE cov: 191 ft: 327 corp: 20/691b lim: 110 exec/s: 0 rss: 42Mb L: 56/68 MS: 2 ChangeByte-EraseBytes-
+#13981	REDUCE cov: 191 ft: 345 corp: 21/813b lim: 122 exec/s: 0 rss: 43Mb L: 122/122 MS: 2 ShuffleBytes-InsertRepeatedBytes-
+#14685	NEW    cov: 191 ft: 348 corp: 22/941b lim: 128 exec/s: 0 rss: 43Mb L: 128/128 MS: 4 InsertRepeatedBytes-InsertRepeatedBytes-CopyPart-CrossOver-
+#14958	REDUCE cov: 191 ft: 348 corp: 22/939b lim: 128 exec/s: 0 rss: 43Mb L: 120/128 MS: 3 InsertByte-EraseBytes-InsertRepeatedBytes-
+#15055	REDUCE cov: 191 ft: 348 corp: 22/938b lim: 128 exec/s: 0 rss: 43Mb L: 65/128 MS: 2 CopyPart-CrossOver-
+#23290	REDUCE cov: 191 ft: 348 corp: 22/937b lim: 128 exec/s: 0 rss: 45Mb L: 64/128 MS: 5 CrossOver-InsertByte-PersAutoDict-EraseBytes-CopyPart- DE: "\000\000\000\000\000\000\000\000"-
+#31597	REDUCE cov: 191 ft: 348 corp: 22/933b lim: 128 exec/s: 0 rss: 47Mb L: 4/128 MS: 2 EraseBytes-CMP- DE: "xxxx"-
+#131072	pulse  cov: 191 ft: 348 corp: 22/933b lim: 128 exec/s: 32768 rss: 74Mb
+#262144	pulse  cov: 191 ft: 348 corp: 22/933b lim: 128 exec/s: 37449 rss: 109Mb
+#524288	pulse  cov: 191 ft: 348 corp: 22/933b lim: 128 exec/s: 34952 rss: 177Mb
+#706567	DONE   cov: 191 ft: 348 corp: 22/933b lim: 128 exec/s: 33646 rss: 225Mb
+###### Recommended dictionary. ######
+"\001\000" # Uses: 20927
+"\000\000\000\000\000\000\000\000" # Uses: 18378
+"xxxx" # Uses: 19478
+###### End of recommended dictionary. ######
+Done 706567 runs in 21 second(s)
