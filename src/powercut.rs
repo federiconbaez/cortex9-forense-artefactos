@@ -1,15 +1,18 @@
-//! Atomicidad del contador ante corte de energía (modelo de fallo).
+//! Contabilidad exacta del contador ante corte de energía (modelo acotado).
 //!
-//! Dos órdenes:
-//! - **write-before-verify (WBV)**: persiste fails+1 y luego verifica el PIN.
-//!   Si hay power-cut entre write y verify, el contador avanzó sin intento
-//!   consumido → **NO preserva** el invariante
-//!   `fails == intentos_fallidos_efectivos`.
-//! - **verify-before-write (VBW)**: verifica en RAM y solo persiste si el
-//!   resultado es rechazo. Power-cut antes del write ⇒ contador intacto
-//!   (fail-safe) → **SÍ preserva**.
+//! Invariante: `fails == intentos_efectivos`.
 //!
-//! Demostración medible; no es un ataque a RPMB real.
+//! - **write-before-verify (WBV)**: persiste fails+1 y luego verifica.
+//!   Power-cut entre write y verify ⇒ **sobreconteo** (viola contabilidad
+//!   exacta por el lado seguro frente a subconteo/elusión).
+//! - **verify-before-write (VBW)**: verifica en RAM y solo entonces escribe.
+//!   Power-cut antes del write ⇒ disco intacto. Preserva el invariante
+//!   **solo si** el resultado del intento interrumpido nunca se observa;
+//!   si pudiera observarse antes del write, VBW sería el orden vulnerable
+//!   (ese caso **no** está modelado aquí).
+//!
+//! Los trials Monte-Carlo repiten el mismo caso determinista (el seed solo
+//! descarta un `u64`). No es un hallazgo de seguridad sobre hardware/RPMB.
 
 use crate::rng::Rng;
 
@@ -95,6 +98,7 @@ pub fn measure_powercut(seed: u64, trials: u64) -> PowercutReport {
     let mut rep = PowercutReport::default();
     for _ in 0..trials {
         rep.trials += 1;
+        // Caso determinista idéntico en cada trial; el seed solo avanza RNG.
         let _ = rng.next_u64();
 
         // WBV + cut → debe romper

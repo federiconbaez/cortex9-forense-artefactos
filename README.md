@@ -15,7 +15,7 @@ Monte-Carlo, bounded exhaustive BFS, and intentional-mutant sensitivity checks.
 | Simuladores de protocolo + propiedades medidas | Receta para romper un teléfono |
 | Contador de PIN / RPMB / Gatekeeper / Weaver | Eludir contador o RPMB reales |
 | FBE CE/DE, idle AFU→BFU, AVB rollback, PATE | Exploits, N-day, agentes extractores |
-| Power-cut: WBV rompe / VBW preserva (demostrado) | Ataque a hardware |
+| Power-cut: modelo de contabilidad exacta bajo fallo acotado (ver abajo) | Ataque a hardware |
 
 Nivel: **modelo / amenaza / propiedad**. Ver `docs/AMENAZA.md`, `docs/MODELO.md`.
 
@@ -40,7 +40,7 @@ Preregistro (semillas/umbrales **antes** de medir): `docs/PREREGISTRO.md`.
 | apple_dp | 1e7 × 3 props | CUMPLIDO |
 | inactivity | 1e7 × 3 props | CUMPLIDO |
 | avb_rollback | 1e7 × 3 props | CUMPLIDO |
-| powercut | 1e7 × 4 checks | CUMPLIDO |
+| powercut | 1e7 × 4 checks (caso determinista repetido) | CUMPLIDO |
 | pate (PATE-FNBR) | 1e7 × 4 props | CUMPLIDO |
 | lock_capabilities | 5 invariantes | CUMPLIDO |
 | BFS pin / rpmb / gk | 19 / 32 / 15 estados | 0 violaciones |
@@ -50,6 +50,21 @@ Preregistro (semillas/umbrales **antes** de medir): `docs/PREREGISTRO.md`.
 
 Hashes y transcript: `evidence/FULL_MEASURE.md`, `evidence/full_measure.json`.
 Elapsed full measure: **671714 ms**.
+
+
+## Powercut (contabilidad, no "hallazgo de seguridad")
+
+Invariante: `fails == intentos_efectivos` (contabilidad exacta).
+
+- **WBV** viola el invariante por **sobreconteo** tras power-cut (lado
+  **seguro** frente a subconteo/elusión del contador).
+- **VBW** lo preserva **solo si** el resultado de un intento interrumpido
+  nunca se observa; si pudiera observarse antes del write, VBW sería el
+  orden vulnerable — **ese caso no está modelado**.
+- Los 1e7 trials **repiten el mismo caso determinista** (no exploran un
+  espacio de fallos diverso).
+
+Detalle: `docs/MODELO.md`, `evidence/FULL_MEASURE.md`.
 
 ## Reproducir
 
