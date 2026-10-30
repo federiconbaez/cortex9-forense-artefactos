@@ -28,4 +28,4 @@ serde_json = { workspace = true }
 
 [[bin]]
 name = "fa-bench"
-path = "benches/throughput.rs"
+path = "src/bin/fa_bench.rs"
