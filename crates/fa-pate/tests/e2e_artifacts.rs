@@ -9,7 +9,12 @@ fn e2e_with_sample_artifacts() {
     let art = dir.join("sample.bin");
     fs::write(&art, b"evidence-bytes").unwrap();
     let digest = sha256(b"evidence-bytes");
-    let hex: String = digest.iter().map(|b| format!("{:02x}", b)).collect();
+    let hex = {
+        use std::fmt::Write;
+        let mut s = String::with_capacity(64);
+        for b in &digest { let _ = write!(s, "{:02x}", b); }
+        s
+    };
 
     let mut t = Transcript::init("E2E-1");
     t.append(

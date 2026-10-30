@@ -262,7 +262,12 @@ mod tests {
     /// Mini helper local para no depender de `hex`.
     mod hex {
         pub fn encode_like(b: &[u8]) -> String {
-            b.iter().map(|x| format!("{:02x}", x)).collect()
+            use std::fmt::Write;
+            let mut s = String::with_capacity(b.len() * 2);
+            for x in b {
+                let _ = write!(s, "{:02x}", x);
+            }
+            s
         }
     }
 }
