@@ -5,8 +5,8 @@
 //! throttle independientes; wipe de slot tras max_fails. Sin ataques a
 //! hardware real.
 
-use crate::crypto::{ct_eq, hmac_sha256};
-use crate::rng::Rng;
+use fa_core::crypto::{ct_eq, hmac_sha256};
+use fa_core::rng::Rng;
 
 #[derive(Clone, Debug)]
 pub struct Slot {

@@ -4,7 +4,7 @@
 //! Apple Platform Security (público). No hay ataques al Secure Enclave.
 
 use crate::pin_counter::LockState;
-use crate::rng::Rng;
+use fa_core::rng::Rng;
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 pub enum DpClass {

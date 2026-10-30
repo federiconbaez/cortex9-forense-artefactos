@@ -6,7 +6,9 @@
 //! sirve para generar casos de prueba reproducibles.
 
 #[derive(Clone, Debug)]
+/// Generador xorshift64* determinista (no criptográfico).
 pub struct Rng {
+    /// Estado interno.
     state: u64,
 }
 
@@ -22,6 +24,7 @@ impl Rng {
         Rng { state }
     }
 
+    /// Siguiente u64.
     pub fn next_u64(&mut self) -> u64 {
         let mut x = self.state;
         x ^= x >> 12;
@@ -37,10 +40,12 @@ impl Rng {
         self.next_u64() % n
     }
 
+    /// Bit aleatorio.
     pub fn bool(&mut self) -> bool {
         self.next_u64() & 1 == 1
     }
 
+    /// `len` bytes.
     pub fn bytes(&mut self, len: usize) -> Vec<u8> {
         (0..len).map(|_| (self.next_u64() & 0xFF) as u8).collect()
     }

@@ -18,8 +18,8 @@
 //! dispositivo real, eludir el contador de PIN vía RPMB, o cualquier receta
 //! operativa. Esto es un simulador de protocolo con tests de propiedades.
 
-use crate::crypto::{ct_eq, hmac_sha256};
-use crate::rng::Rng;
+use fa_core::crypto::{ct_eq, hmac_sha256};
+use fa_core::rng::Rng;
 
 /// Tamaño del bloque de datos RPMB modelado (bytes). JEDEC usa 256; aquí
 /// usamos 32 para mantener los tests livianos sin cambiar las propiedades.

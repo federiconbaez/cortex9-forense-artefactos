@@ -4,9 +4,9 @@
 //! unlock y se evicta al volver a BFU (reboot o idle lock). Modelo de anillos
 //! de claves, sin tocar keymaster real.
 
-use crate::crypto::hmac_sha256;
 use crate::pin_counter::LockState;
-use crate::rng::Rng;
+use fa_core::crypto::hmac_sha256;
+use fa_core::rng::Rng;
 
 #[derive(Clone, Debug)]
 pub struct KeyRing {

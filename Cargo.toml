@@ -1,24 +1,34 @@
-[package]
-name = "cortex9-forense-artefactos"
-version = "0.1.0"
+[workspace]
+resolver = "2"
+members = [
+  "crates/fa-core",
+  "crates/fa-checker",
+  "crates/fa-models",
+  "crates/fa-pate",
+  "crates/fa-cli",
+]
+default-members = ["crates/fa-cli"]
+
+[workspace.package]
+version = "0.2.0"
 edition = "2021"
 rust-version = "1.85"
 license = "Apache-2.0"
-description = "Modelos formales verificables de artefactos de forense movil: contador de intentos de PIN (BFU/AFU), protocolo RPMB anti-rollback, Gatekeeper HMAC-throttle y tabla de capacidades por estado de bloqueo. Nivel modelo/amenaza, sin recetas operativas."
-repository = "https://github.com/federiconbaez/cortex9-forense-artefactos"
 authors = ["Federico Nicolas Báez Rizzo"]
+repository = "https://github.com/federiconbaez/cortex9-forense-artefactos"
 publish = false
-default-run = "forense-artefactos"
 
-[dependencies]
-
-[lib]
-name = "forense_artefactos"
-path = "src/lib.rs"
-
-[[bin]]
-name = "forense-artefactos"
-path = "src/bin/forense-artefactos.rs"
+[workspace.dependencies]
+fa-core = { path = "crates/fa-core", version = "0.2.0" }
+fa-checker = { path = "crates/fa-checker", version = "0.2.0" }
+fa-models = { path = "crates/fa-models", version = "0.2.0" }
+fa-pate = { path = "crates/fa-pate", version = "0.2.0" }
+rayon = "1.10"
+criterion = { version = "0.5", features = ["html_reports"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+clap = { version = "4", features = ["derive"] }
 
 [profile.release]
-opt-level = 2
+opt-level = 3
+lto = "thin"

@@ -6,22 +6,29 @@ on:
   pull_request:
 
 jobs:
-  unit:
-    name: fmt + clippy + test + measure-ci + bfs + mutants
+  matrix:
+    name: fmt+clippy+test+measure (${{ matrix.toolchain }})
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        toolchain: [stable, "1.85"]
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@master
         with:
-          toolchain: stable
+          toolchain: ${{ matrix.toolchain }}
           components: clippy, rustfmt
       - name: fmt
+        if: matrix.toolchain == 'stable'
         run: cargo fmt --all -- --check
       - name: clippy
-        run: cargo clippy --all-targets -- -D warnings
+        run: cargo clippy --workspace --all-targets -- -D warnings
       - name: test
         run: cargo test --workspace
-      - name: measure ci (1e4) + bfs + mutants
-        run: cargo run --release --quiet --bin forense-artefactos -- all --mode ci
-      - name: catalog
-        run: cargo run --release --quiet --bin forense-artefactos -- catalog
+      - name: measure ci + mutants
+        run: cargo run --release -p fa-cli --bin fa -- all --mode ci
+      - name: pate example
+        run: cargo run -p fa-pate --example pate_demo
+      - name: audit
+        if: matrix.toolchain == 'stable'
+        run: cargo audit || echo "AUDIT_SOFT_FAIL declared"

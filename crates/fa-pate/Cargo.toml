@@ -1,0 +1,15 @@
+[package]
+name = "fa-pate"
+description = "PATE-FNBR: Protocolo de Atestación de Transcripción de Extracción (hash-encadenada)."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[dependencies]
+fa-core = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }

@@ -5,7 +5,7 @@
 
 use crate::fbe_keys::KeyRing;
 use crate::pin_counter::LockState;
-use crate::rng::Rng;
+use fa_core::rng::Rng;
 
 #[derive(Clone, Debug)]
 pub struct IdlePolicy {

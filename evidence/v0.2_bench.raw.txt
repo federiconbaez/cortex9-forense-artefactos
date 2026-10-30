@@ -1,0 +1,5 @@
+=== benches v0.2 (preregistro docs/PREREGISTRO_v0.2.md) ===
+checker_pin_states_per_s=9163547 total_states=19000 rounds=1000 elapsed_ms=2.07 meta>=50000 => CUMPLIDO
+pate_verify_n=100000 per_s=1537553 meta>=20000 => CUMPLIDO
+pate_verify_n=1000000 per_s=1514973 meta>=20000 => CUMPLIDO
+pin_mc_1e4_ms=1 all_pass=true (v0.1 all-models ci ~639ms reference; solo pin aqui)

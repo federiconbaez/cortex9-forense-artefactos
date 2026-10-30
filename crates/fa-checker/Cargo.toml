@@ -1,0 +1,18 @@
+[package]
+name = "fa-checker"
+description = "Model checker explícito genérico (BFS/DFS) para modelos fa-core."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[dependencies]
+fa-core = { workspace = true }
+rayon = { workspace = true, optional = true }
+
+[features]
+default = []
+parallel = ["dep:rayon"]

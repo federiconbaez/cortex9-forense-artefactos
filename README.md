@@ -1,99 +1,50 @@
 # cortex9-forense-artefactos
 
-**ES:** Modelos formales verificables de artefactos de forense móvil
-(PIN/BFU/AFU, RPMB, Gatekeeper/Weaver, FBE, Data Protection, AVB, PATE-FNBR),
-con Monte-Carlo a **10⁷** trials, BFS exhaustivo acotado y mutantes de
-sensibilidad.
+**v0.2.0** — Workspace modular de modelos formales de forense móvil + PATE-FNBR.
 
-**EN:** Verifiable formal models of mobile-forensics artifacts with 1e7-trial
-Monte-Carlo, bounded exhaustive BFS, and intentional-mutant sensitivity checks.
+Nivel **modelo / amenaza / propiedad**. Sin recetas ni exploits contra dispositivos.
 
-## Qué es / qué no es
+## Crates
 
-| Es | No es |
-|----|-------|
-| Simuladores de protocolo + propiedades medidas | Receta para romper un teléfono |
-| Contador de PIN / RPMB / Gatekeeper / Weaver | Eludir contador o RPMB reales |
-| FBE CE/DE, idle AFU→BFU, AVB rollback, PATE | Exploits, N-day, agentes extractores |
-| Power-cut: modelo de contabilidad exacta bajo fallo acotado (ver abajo) | Ataque a hardware |
+`fa-core` · `fa-checker` · `fa-models` · `fa-pate` · `fa-cli`
 
-Nivel: **modelo / amenaza / propiedad**. Ver `docs/AMENAZA.md`, `docs/MODELO.md`.
-
-## Escala (v2)
-
-| Modo | Trials | Dónde |
-|------|-------:|-------|
-| `ci` | 10_000 | GitHub Actions |
-| `full` | **10_000_000** | `evidence/FULL_MEASURE.md` (versionado) |
-
-Preregistro (semillas/umbrales **antes** de medir): `docs/PREREGISTRO.md`.
-
-## Resultados medidos (full, por construcción)
-
-| Artefacto | Trials / estados | Resultado |
-|-----------|------------------:|-----------|
-| pin_counter | 1e7 × 6 props | CUMPLIDO |
-| rpmb | 1e7 × 5 props | CUMPLIDO |
-| gatekeeper | 1e7 × 5 props | CUMPLIDO |
-| weaver | 1e7 × 4 props | CUMPLIDO |
-| fbe_keys | 1e7 × 4 props | CUMPLIDO |
-| apple_dp | 1e7 × 3 props | CUMPLIDO |
-| inactivity | 1e7 × 3 props | CUMPLIDO |
-| avb_rollback | 1e7 × 3 props | CUMPLIDO |
-| powercut | 1e7 × 4 checks (caso determinista repetido) | CUMPLIDO |
-| pate (PATE-FNBR) | 1e7 × 4 props | CUMPLIDO |
-| lock_capabilities | 5 invariantes | CUMPLIDO |
-| BFS pin / rpmb / gk | 19 / 32 / 15 estados | 0 violaciones |
-| mutantes | 7/7 detectados | CUMPLIDO |
-| fuzz smoke | 706567 runs / 21s | 0 crashes |
-| Kani | — | **NO VIABLE** (no instalado) |
-
-Hashes y transcript: `evidence/FULL_MEASURE.md`, `evidence/full_measure.json`.
-Elapsed full measure: **671714 ms**.
-
-
-## Powercut (contabilidad, no "hallazgo de seguridad")
-
-Invariante: `fails == intentos_efectivos` (contabilidad exacta).
-
-- **WBV** viola el invariante por **sobreconteo** tras power-cut (lado
-  **seguro** frente a subconteo/elusión del contador).
-- **VBW** lo preserva **solo si** el resultado de un intento interrumpido
-  nunca se observa; si pudiera observarse antes del write, VBW sería el
-  orden vulnerable — **ese caso no está modelado**.
-- Los 1e7 trials **repiten el mismo caso determinista** (no exploran un
-  espacio de fallos diverso).
-
-Detalle: `docs/MODELO.md`, `evidence/FULL_MEASURE.md`.
-
-## Reproducir
+## CLI útil (perito)
 
 ```bash
-cargo test --workspace
-cargo run --release --bin forense-artefactos -- all --mode ci
-# full (≈11 min release):
-cargo run --release --bin forense-artefactos -- all --mode full
-# fuzz (nightly + g++):
-cargo +nightly fuzz run hmac_pin_rpmb -- -max_total_time=20
+cargo run -p fa-cli --bin fa -- pate init EXP-001 --out case.json
+cargo run -p fa-cli --bin fa -- pate append case.json \
+  --kind acquire --payload ffs --timestamp 2026-10-29T18:00:00-03:00 \
+  --operator "F. Báez" --tool lab-X \
+  --artifact-sha256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+cargo run -p fa-cli --bin fa -- pate seal case.json --operator "F. Báez" --timestamp 2026-10-29T18:05:00-03:00
+cargo run -p fa-cli --bin fa -- pate verify case.json
+cargo run -p fa-cli --bin fa -- pate report case.json --out case.md
 ```
 
-Sin crates de runtime en la lib (SHA-256/HMAC propios; FIPS/RFC vectors).
-Fuzz usa `libfuzzer-sys` solo bajo `fuzz/`.
+Model checking / grafos / mutantes:
 
-## CI
+```bash
+cargo run -p fa-cli --bin fa -- check pin
+cargo run -p fa-cli --bin fa -- graph rpmb -o rpmb.dot
+cargo run -p fa-cli --bin fa -- mutants
+cargo run -p fa-cli --bin fa -- all --mode ci
+```
 
-`.github/workflows/ci.yml`: fmt + `clippy -D warnings` + `cargo test` +
-`all --mode ci` + catalog. Sin `#[ignore]` ni `continue-on-error`.
+## Medición
 
-## Mapping tesis
+Preregistro: `docs/PREREGISTRO_v0.2.md` (**antes** de medir).  
+Evidencia: `evidence/` (v0.1 conservada) + `evidence/v0.2_*`.
 
-Capítulos **7, 11, 12, 13, 19** — detalle en `docs/MODELO.md`.
+```bash
+cargo run --release -p fa-cli --bin fa -- all --mode ci    # 1e4
+cargo run --release -p fa-cli --bin fa-bench               # throughput
+```
 
 ## Límites
 
-- No se mide hardware real.
-- "Por construcción" = corpus = propio modelo; mutantes demuestran sensibilidad.
-- Umbral no alcanzado ⇒ **NO CUMPLIDO** (exit ≠ 0).
-- Kani no viable en esta caja (declarado).
+- Gatekeeper: MC + mutantes sí; adapter `Model` en checker genérico **pendiente**.
+- Kani: **NO VIABLE**.
+- Powercut: contabilidad exacta (WBV=sobreconteo seguro; VBW condicional); no hallazgo de seguridad.
+- No se publica en crates.io.
 
-License: Apache-2.0
+License: Apache-2.0 · MSRV 1.85

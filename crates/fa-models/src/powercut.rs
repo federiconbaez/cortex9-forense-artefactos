@@ -14,7 +14,7 @@
 //! Los trials Monte-Carlo repiten el mismo caso determinista (el seed solo
 //! descarta un `u64`). No es un hallazgo de seguridad sobre hardware/RPMB.
 
-use crate::rng::Rng;
+use fa_core::rng::Rng;
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Order {

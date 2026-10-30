@@ -1,0 +1,25 @@
+{
+  "schema": "cortex9-forense-artefactos/v0.2",
+  "measured_at_art": "2026-10-29 21:59:31 ART",
+  "version": "0.2.0",
+  "binary_sha256": "919577474187a43d92e9ffc088eea7be66fa4701389e8a94974f38f85d91c708",
+  "measure_ci_raw_sha256": "9f3844349a35c779310a4319e02ac4ebc1f4ec629d6d51825aa34e10a43e0db4",
+  "bench_raw_sha256": "59d9851618682ec2ce2d42afd41ad06d394b7b23d5a3c3c8684a6018185f9ed8",
+  "tests": "43 pass (fa-core10+fa-checker1+fa-models29+fa-pate2+e2e1)",
+  "mutants": "12/12",
+  "bfs_pin_states": 19,
+  "bfs_rpmb_states": 32,
+  "gatekeeper_model_adapter": "NO MEDIDO (pendiente)",
+  "benches": {
+    "checker_pin_states_per_s": 9163547,
+    "pate_verify_1e5_per_s": 1537553,
+    "pate_verify_1e6_per_s": 1514973,
+    "pin_mc_1e4_ms": 1,
+    "v01_all_models_ci_ms_reference": 639
+  },
+  "metas": {
+    "checker_states_per_s": 50000,
+    "pate_per_s": 20000
+  },
+  "label": "por construccion where applicable"
+}

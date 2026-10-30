@@ -14,7 +14,7 @@
 //! real de un dispositivo concreto; interceptar RPMB; inyectar código en TEE/
 //! Secure Enclave. Nada de esto se implementa ni se describe como procedimiento.
 
-use crate::rng::Rng;
+use fa_core::rng::Rng;
 
 /// Estado de bloqueo del dispositivo (modelo).
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]

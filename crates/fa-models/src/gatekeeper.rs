@@ -15,10 +15,10 @@
 //! Weaver / Titan M / Secure Enclave, o derivar claves de un teléfono
 //! concreto. Solo el modelo de protocolo y sus propiedades.
 
-use crate::crypto::{ct_eq, hmac_sha256};
 use crate::pin_counter::{AttemptOutcome, LockState, PinCounter, PinPolicy};
-use crate::rng::Rng;
 use crate::rpmb::{RpmbDevice, RPMB_DATA_LEN};
+use fa_core::crypto::{ct_eq, hmac_sha256};
+use fa_core::rng::Rng;
 
 /// Handle opaco devuelto por Enroll (32 bytes = HMAC-SHA256).
 pub type PasswordHandle = [u8; 32];

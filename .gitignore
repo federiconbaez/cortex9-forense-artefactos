@@ -3,3 +3,7 @@ fuzz/target/
 fuzz/corpus/
 fuzz/artifacts/
 fuzz/coverage/
+_legacy_v01/
+*.dot
+case.json
+case.md

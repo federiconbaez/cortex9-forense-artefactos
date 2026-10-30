@@ -4,7 +4,7 @@
 //! tamper-evident. Una imagen con index < stored se rechaza. Modelo de
 //! propiedad; sin flashear dispositivos.
 
-use crate::rng::Rng;
+use fa_core::rng::Rng;
 
 #[derive(Clone, Debug)]
 pub struct AvbStore {
