@@ -12,7 +12,9 @@ fn e2e_with_sample_artifacts() {
     let hex = {
         use std::fmt::Write;
         let mut s = String::with_capacity(64);
-        for b in &digest { let _ = write!(s, "{:02x}", b); }
+        for b in &digest {
+            let _ = write!(s, "{:02x}", b);
+        }
         s
     };
 
