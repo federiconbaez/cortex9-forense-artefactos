@@ -10,12 +10,12 @@ avb_rollback: mono=10000/10000 rb=10000/10000 eq=10000/10000 => CUMPLIDO
 powercut: wbv_breaks=10000/10000 vbw_preserves=10000/10000 wbv_nocut=10000/10000 vbw_nocut=10000/10000 => CUMPLIDO
 pate: honest=10000/10000 insert=10000/10000 omit=10000/10000 reorder=10000/10000 => CUMPLIDO
 lock_capabilities: rows=7 invariantes_ok=true => CUMPLIDO
-=== measure global: CUMPLIDO (elapsed_ms=799) etiqueta=por construccion ===
-=== bfs (limites preregistrados) ===
-pin_counter: states=19 transitions=29 violations=0 elapsed_ms=0 bound=max_fails=5, throttle∈{0,1}, states BFU/AFU/Wiped => CUMPLIDO
-rpmb: states=32 transitions=168 violations=0 elapsed_ms=0 bound=n_blocks=2, write_counter≤8, data∈{0,1} => CUMPLIDO
-gatekeeper: adapter_Model=pendiente (MC/mutantes CUMPLIDO; BFS legacy evidence states=15) => NO MEDIDO_en_v0.2_checker
-=== bfs global: CUMPLIDO (pin+rpmb) ===
+=== measure global: CUMPLIDO (elapsed_ms=769) etiqueta=por construccion ===
+=== bfs (v0.1-equivalent via Model + legacy oracle) ===
+pin_counter: states=19 transitions=30 violations=0 elapsed_ms=0 bound=max_fails=5, throttle∈{0,1}, states BFU/AFU/Wiped => CUMPLIDO
+rpmb: states=32 transitions=332 violations=0 elapsed_ms=0 bound=n_blocks=2, write_counter≤8, data∈{0,1} => CUMPLIDO
+gatekeeper: states=15 transitions=24 violations=0 elapsed_ms=1 bound=max_fails=4, secreto abstracto {0,1}, RPMB tracks fails => CUMPLIDO
+=== bfs global: CUMPLIDO ===
 === mutants (sensibilidad) ===
 pin_mono_broken [pin_counter]: detected=true (fails 0->0)
 pin_no_wipe [pin_counter]: detected=true (fails=5 wiped=false)

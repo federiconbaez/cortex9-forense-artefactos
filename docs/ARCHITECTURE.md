@@ -23,7 +23,7 @@ flowchart TB
 |-------|-----|
 | `fa-core` | `Model`/`State`/`Action`/`Property`/`Mutant`, crypto, RNG, prereg |
 | `fa-checker` | exploración, contraejemplos, DOT |
-| `fa-models` | mecanismos + mutantes + adapters pin/rpmb |
+| `fa-models` | mecanismos + mutantes + adapters pin/rpmb/gatekeeper + oráculo legacy_bfs |
 | `fa-pate` | transcripción hash-encadenada |
 | `fa-cli` | `fa` / `forense-artefactos` / `fa-bench` |
 

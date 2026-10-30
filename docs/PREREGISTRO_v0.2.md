@@ -44,3 +44,9 @@ Si una meta no se alcanza ⇒ **NO CUMPLIDO** (se publica el número real).
 
 - CLI `forense-artefactos` / `fa` conserva `measure|bfs|mutants|catalog|all`.
 - Evidencia previa en `evidence/` se conserva; se agrega `evidence/v0.2_*`.
+
+## Nota post-medición (2026-10-30, no altera umbrales)
+
+Las metas ≥50_000 estados/s fueron **conservadoras** (cumplidas con holgura).
+Para comparar refactor vs monolito usar el harness like-for-like (`fa-bench`)
+y el **ratio v0.2/v0.1**, no el umbral absoluto.

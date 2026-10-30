@@ -1,10 +1,14 @@
-//! Adaptador [`Model`] para RPMB acotado (n_blocks=2, wc≤8).
+//! Adaptador [`Model`] RPMB — grafo abstracto equivalente a v0.1 `bfs_rpmb`.
+//!
+//! Transiciones (por estado con wc<8): ∀ addr∈{0,1}, ∀ bit∈{0,1}:
+//! Honest, BadMac, y si wc>0 también Replay. BadMac/Replay no cambian estado;
+//! Honest hace `wc+1` y actualiza el bit del addr. Misma convención de conteo
+//! que v0.1 (cada acción = 1 transición).
 
-use crate::rpmb::{RpmbDevice, RPMB_DATA_LEN};
 use fa_core::{Action, Model, Property, Result, State};
 
 /// Estado abstracto RPMB.
-#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 pub struct RpmbState {
     /// Write counter.
     pub wc: u32,
@@ -25,15 +29,24 @@ impl State for RpmbState {
 pub enum RpmbAction {
     /// Escritura honesta.
     Honest {
-        /// Dirección.
+        /// Addr.
         addr: u16,
-        /// Bit de datos.
+        /// Bit.
         bit: u8,
     },
-    /// Intento con MAC inválido (estado no cambia).
+    /// MAC inválido.
     BadMac {
-        /// Dirección.
+        /// Addr.
         addr: u16,
+        /// Bit.
+        bit: u8,
+    },
+    /// Replay wc=0.
+    Replay {
+        /// Addr.
+        addr: u16,
+        /// Bit.
+        bit: u8,
     },
 }
 
@@ -42,6 +55,7 @@ impl Action for RpmbAction {
         match self {
             RpmbAction::Honest { .. } => "honest",
             RpmbAction::BadMac { .. } => "bad_mac",
+            RpmbAction::Replay { .. } => "replay",
         }
     }
 }
@@ -49,27 +63,6 @@ impl Action for RpmbAction {
 /// Modelo RPMB.
 #[derive(Clone, Debug, Default)]
 pub struct RpmbModel;
-
-fn rebuild(s: &RpmbState) -> RpmbDevice {
-    let mut cur = RpmbDevice::new([0xABu8; 32], 2);
-    // Aproxima el estado escribiendo b0/b1 con wc pasos (acotado).
-    for i in 0..s.wc {
-        let addr = (i % 2) as u16;
-        let mut data = [0u8; RPMB_DATA_LEN];
-        data[0] = if addr == 0 { s.b0 } else { s.b1 };
-        let f = cur.sign_write(addr, cur.write_counter(), data);
-        let _ = cur.authenticated_write(&f);
-    }
-    cur
-}
-
-fn abs(d: &RpmbDevice) -> RpmbState {
-    RpmbState {
-        wc: d.write_counter().min(8),
-        b0: d.authenticated_read(0).map(|r| r.data[0]).unwrap_or(0),
-        b1: d.authenticated_read(1).map(|r| r.data[0]).unwrap_or(0),
-    }
-}
 
 impl Model for RpmbModel {
     type S = RpmbState;
@@ -91,31 +84,28 @@ impl Model for RpmbModel {
         if s.wc >= 8 {
             return Ok(vec![]);
         }
-        let d = rebuild(s);
         let mut out = Vec::new();
-        for addr in [0u16, 1] {
-            for bit in [0u8, 1] {
-                let mut n = d.clone();
-                let mut data = [0u8; RPMB_DATA_LEN];
-                data[0] = bit;
-                let f = n.sign_write(addr, n.write_counter(), data);
-                let _ = n.authenticated_write(&f);
-                let st = abs(&n);
-                if st.wc <= 8 {
-                    out.push((RpmbAction::Honest { addr, bit }, st));
+        for addr in [0u16, 1u16] {
+            for bit in [0u8, 1u8] {
+                let mut next = *s;
+                if addr == 0 {
+                    next.b0 = bit;
+                } else {
+                    next.b1 = bit;
+                }
+                next.wc = s.wc + 1;
+                out.push((RpmbAction::Honest { addr, bit }, next));
+                out.push((RpmbAction::BadMac { addr, bit }, *s));
+                if s.wc > 0 {
+                    out.push((RpmbAction::Replay { addr, bit }, *s));
                 }
             }
-            let mut n = d.clone();
-            let mut f = n.sign_write(addr, n.write_counter(), [0u8; RPMB_DATA_LEN]);
-            f.mac[0] ^= 0xFF;
-            let _ = n.authenticated_write(&f);
-            out.push((RpmbAction::BadMac { addr }, abs(&n)));
         }
         Ok(out)
     }
 }
 
-/// wc acotado.
+/// Cota de wc.
 pub struct RpmbBound;
 impl Property<RpmbModel> for RpmbBound {
     fn name(&self) -> &str {
@@ -126,7 +116,7 @@ impl Property<RpmbModel> for RpmbBound {
     }
 }
 
-/// Propiedades para CLI.
+/// Propiedades CLI.
 pub fn rpmb_properties() -> Vec<Box<dyn Property<RpmbModel>>> {
     vec![Box::new(RpmbBound)]
 }

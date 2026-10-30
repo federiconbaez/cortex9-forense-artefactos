@@ -131,7 +131,7 @@ checksum = "0e9c71c2167ca323c882b99918929403426e2373ea17242ff5653e0d5e1058be"
 
 [[package]]
 name = "fa-checker"
-version = "0.2.0"
+version = "0.2.1"
 dependencies = [
  "fa-core",
  "rayon",
@@ -139,7 +139,7 @@ dependencies = [
 
 [[package]]
 name = "fa-cli"
-version = "0.2.0"
+version = "0.2.1"
 dependencies = [
  "clap",
  "fa-checker",
@@ -151,14 +151,14 @@ dependencies = [
 
 [[package]]
 name = "fa-core"
-version = "0.2.0"
+version = "0.2.1"
 dependencies = [
  "serde",
 ]
 
 [[package]]
 name = "fa-models"
-version = "0.2.0"
+version = "0.2.1"
 dependencies = [
  "fa-checker",
  "fa-core",
@@ -166,7 +166,7 @@ dependencies = [
 
 [[package]]
 name = "fa-pate"
-version = "0.2.0"
+version = "0.2.1"
 dependencies = [
  "fa-core",
  "serde",

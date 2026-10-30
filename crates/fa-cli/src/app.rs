@@ -7,7 +7,9 @@ use fa_models::apple_dp::measure_apple_dp;
 use fa_models::avb_rollback::measure_avb;
 use fa_models::fbe_keys::measure_fbe;
 use fa_models::gatekeeper::measure_gatekeeper_properties;
+use fa_models::gatekeeper_model::GatekeeperModel;
 use fa_models::inactivity::measure_inactivity;
+use fa_models::legacy_bfs::{bfs_gatekeeper, bfs_pin_counter, bfs_rpmb};
 use fa_models::lock_capabilities::{catalog, measure_capability_properties, Reachability};
 use fa_models::mutants::run_all_mutants;
 use fa_models::pin_counter::measure_pin_properties;
@@ -368,28 +370,37 @@ fn cmd_measure(mode: &str) -> ExitCode {
 }
 
 fn cmd_bfs() -> ExitCode {
-    println!("=== bfs (limites preregistrados) ===");
+    println!("=== bfs (v0.1-equivalent via Model + legacy oracle) ===");
     let cfg = CheckerConfig {
         max_states: 10_000,
         dfs: false,
     };
     let mut ok = true;
-    let pin = explore(&PinModel::default(), &cfg).expect("pin explore");
+    let pin = explore(&PinModel::default(), &cfg).expect("pin");
+    let pin_g = bfs_pin_counter();
     println!(
         "pin_counter: states={} transitions={} violations=0 elapsed_ms={} bound=max_fails=5, throttle∈{{0,1}}, states BFU/AFU/Wiped => {}",
-        pin.states, pin.transitions, pin.elapsed_ms, flag(true)
+        pin.states, pin.transitions, pin.elapsed_ms, flag(pin.states == pin_g.states_explored && pin.transitions == pin_g.transitions)
     );
-    let rpmb = explore(&RpmbModel, &cfg).expect("rpmb explore");
+    ok &= pin.states == pin_g.states_explored && pin.transitions == pin_g.transitions;
+
+    let rpmb = explore(&RpmbModel, &cfg).expect("rpmb");
+    let rpmb_g = bfs_rpmb();
     println!(
         "rpmb: states={} transitions={} violations=0 elapsed_ms={} bound=n_blocks=2, write_counter≤8, data∈{{0,1}} => {}",
-        rpmb.states, rpmb.transitions, rpmb.elapsed_ms, flag(rpmb.states > 0)
+        rpmb.states, rpmb.transitions, rpmb.elapsed_ms, flag(rpmb.states == rpmb_g.states_explored && rpmb.transitions == rpmb_g.transitions)
     );
-    ok &= rpmb.states > 0 && pin.states > 0;
-    // Gatekeeper Model adapter genérico: pendiente v0.2.1. MC+mutantes sí cubren GK.
+    ok &= rpmb.states == rpmb_g.states_explored && rpmb.transitions == rpmb_g.transitions;
+
+    let gk = explore(&GatekeeperModel::default(), &cfg).expect("gk");
+    let gk_g = bfs_gatekeeper();
     println!(
-        "gatekeeper: adapter_Model=pendiente (MC/mutantes CUMPLIDO; BFS legacy evidence states=15) => NO MEDIDO_en_v0.2_checker"
+        "gatekeeper: states={} transitions={} violations=0 elapsed_ms={} bound=max_fails=4, secreto abstracto {{0,1}}, RPMB tracks fails => {}",
+        gk.states, gk.transitions, gk.elapsed_ms, flag(gk.states == gk_g.states_explored && gk.transitions == gk_g.transitions)
     );
-    println!("=== bfs global: {} (pin+rpmb) ===", flag(ok));
+    ok &= gk.states == gk_g.states_explored && gk.transitions == gk_g.transitions;
+
+    println!("=== bfs global: {} ===", flag(ok));
     if ok {
         ExitCode::SUCCESS
     } else {
@@ -484,6 +495,28 @@ fn cmd_check(model: &str) -> ExitCode {
                 }
             }
         }
+        "gatekeeper" | "gk" => match check(
+            &GatekeeperModel::default(),
+            &[fa_models::gatekeeper_model::GkBound],
+            &cfg,
+        ) {
+            Ok(CheckOutcome::Ok {
+                states,
+                transitions,
+                elapsed_ms,
+            }) => {
+                println!("check gatekeeper: OK states={states} transitions={transitions} elapsed_ms={elapsed_ms}");
+                ExitCode::SUCCESS
+            }
+            Ok(CheckOutcome::Violated { counterexample, .. }) => {
+                println!("check gatekeeper: VIOLATED {}", counterexample.property);
+                ExitCode::FAILURE
+            }
+            Err(e) => {
+                eprintln!("{e}");
+                ExitCode::FAILURE
+            }
+        },
         "rpmb" => match check(&RpmbModel, &[fa_models::rpmb_model::RpmbBound], &cfg) {
             Ok(CheckOutcome::Ok {
                 states,
@@ -503,7 +536,7 @@ fn cmd_check(model: &str) -> ExitCode {
             }
         },
         other => {
-            eprintln!("modelo desconocido: {other} (pin|rpmb)");
+            eprintln!("modelo desconocido: {other} (pin|rpmb|gatekeeper)");
             ExitCode::FAILURE
         }
     }
@@ -517,6 +550,7 @@ fn cmd_graph(model: &str, out: Option<PathBuf>) -> ExitCode {
     let dot = match model {
         "pin" | "pin_counter" => to_dot(&PinModel::default(), &cfg),
         "rpmb" => to_dot(&RpmbModel, &cfg),
+        "gatekeeper" | "gk" => to_dot(&GatekeeperModel::default(), &cfg),
         other => {
             eprintln!("modelo desconocido: {other}");
             return ExitCode::FAILURE;

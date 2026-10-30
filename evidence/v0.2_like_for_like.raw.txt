@@ -1,0 +1,15 @@
+=== like-for-like bench ===
+metas preregistro >=50k st/s fueron conservadoras; ratio v02/v01 es la cifra util
+bfs_pin: v01=19/30 v02=19/30 match=true v01_st_s=14553214 v02_st_s=9623830 ratio=0.661
+bfs_rpmb: v01=32/332 v02=32/332 match=true v01_st_s=34068 v02_st_s=3865601 ratio=113.469
+bfs_gatekeeper: v01=15/24 v02=15/24 match=true v01_st_s=67939 v02_st_s=9573 ratio=0.141
+=== MC 1000000 (shared measure_* path; same hardware) ===
+mc_pin_1e6_ms=160 all_pass=true
+mc_rpmb_1e6_ms=8928 all_pass=true
+mc_gatekeeper_1e6_ms=37365 all_pass=true
+mc_weaver_1e6_ms=8561 all_pass=true
+mc_fbe_1e6_ms=3332 all_pass=true
+mc_apple_dp_1e6_ms=0 all_pass=true
+mc_inactivity_1e6_ms=2327 all_pass=true
+mc_avb_1e6_ms=7 all_pass=true
+mc_powercut_1e6_ms=0 all_pass=true

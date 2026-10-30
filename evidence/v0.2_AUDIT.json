@@ -1,0 +1,30 @@
+{
+  "version": "0.2.1-audit",
+  "measured_at_art": "2026-10-30 01:13:11 ART",
+  "binary_sha256": "8b4ee30b014a1cc10205ee754ee545a3b48be9a8c5912bfaea8c473f1090372e",
+  "fa_bench_sha256": "dd27c30565a52c400db5f683e53903920085c8e8820a5beea3658beb2c4668ed",
+  "measure_ci_raw_sha256": "b4491e2497219b58b8e0cfb4c825f9cb66363238553ce71376d08475bc3d7093",
+  "like_for_like_raw_sha256": "fd137508f911ea6468a0df0039fee1c9e4969df1de5998f83e51d72d61e07367",
+  "tests": "49 pass (fa-checker1+fa-core10+fa-models35+fa-pate2+e2e1)",
+  "mutants": "12/12",
+  "bfs": {
+    "pin": {
+      "states": 19,
+      "transitions": 30,
+      "match_v01": true
+    },
+    "rpmb": {
+      "states": 32,
+      "transitions": 332,
+      "match_v01": true
+    },
+    "gatekeeper": {
+      "states": 15,
+      "transitions": 24,
+      "match_v01": true
+    }
+  },
+  "gatekeeper_model_adapter": "CUMPLIDO (equiv legacy e593662)",
+  "prereg_metas_note": ">=50k st/s conservadoras; ratio v02/v01 es la cifra util",
+  "kani": "NO VIABLE"
+}

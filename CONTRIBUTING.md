@@ -1,7 +1,7 @@
 # Contributing
 
 1. Rama + PR; merge fast-forward local (nunca `gh pr merge` / force-push sin OK).
-2. Author/committer: `Federico Nicolas Báez Rizzo <43962066+federiconbaez@users.noreply.github.com>` (tilde).
+2. Author/committer: `Federico Nicolas Baez Rizzo <43962066+federiconbaez@users.noreply.github.com>` (sin tilde en el apellido).
 3. Mensaje husky con `Ref: CX9-<n>`.
 4. Preregistrar umbrales **antes** de medir.
 5. Sin menciones de IA / Co-authored-by.

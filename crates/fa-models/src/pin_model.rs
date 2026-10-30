@@ -135,9 +135,15 @@ impl Model for PinModel {
     fn successors(&self, s: &PinState) -> Result<Vec<(PinAction, PinState)>> {
         let mut out = Vec::new();
         if s.state == 2 {
-            let mut c = self.materialize(s);
-            let _ = c.attempt(b"P");
-            out.push((PinAction::AttemptOk, Self::abstract_of(&c)));
+            // Misma cobertura que v0.1: intento ok y bad sobre wiped.
+            for (act, cand) in [
+                (PinAction::AttemptOk, &b"P"[..]),
+                (PinAction::AttemptBad, &b"X"[..]),
+            ] {
+                let mut c = self.materialize(s);
+                let _ = c.attempt(cand);
+                out.push((act, Self::abstract_of(&c)));
+            }
             return Ok(out);
         }
         if s.throttled {
